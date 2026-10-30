@@ -1,7 +1,9 @@
+import { SignUpButton } from "@clerk/nextjs";
+
 export default function SignInPage(){
     return(
     <>
-        <h1>Sign-Up</h1>
+        <SignUpButton/>
     </>
     )
 }

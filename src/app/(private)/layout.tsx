@@ -1,17 +1,17 @@
+// app/(private)/layout.tsx
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { ensureUser } from "@/lib/ensure-user";
 
-export default async function AuthLayout({
+export default async function PrivateLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const { userId } = await auth();
-  if (!userId) redirect("/signup");
+  if (!userId) redirect("/sign-in");
 
-  return (
-    <main className="flex min-h-screen items-center justify-center p-4">
-      {children}
-    </main>
-  );
+  await ensureUser();
+
+  return <>{children}</>;
 }
