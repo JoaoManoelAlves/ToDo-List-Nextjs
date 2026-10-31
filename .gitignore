@@ -39,3 +39,4 @@ pnpm-debug.log*
 next-env.d.ts
 
 /prisma/../src/generated/prisma
+./prisma/migrations

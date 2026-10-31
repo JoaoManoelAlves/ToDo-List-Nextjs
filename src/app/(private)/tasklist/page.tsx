@@ -3,17 +3,20 @@ import { ensureUser } from "@/lib/ensure-user";
 import { prisma } from "@/lib/prisma";
 
 export default async function TaskListPage() {
-    const user = await ensureUser();
+  const user = await ensureUser();
 
-    const tasks = user ? await prisma.task.findMany({
+  const tasks = user
+    ? await prisma.task.findMany({
         where: { userId: user.id },
         orderBy: { createdAt: "desc" },
-        select: { id: true, title: true, description: true },
-    }): [];
+        select: { id: true, title: true, description: true, completed: true },
+      })
+    : [];
 
-    return (
-        <div className="mx-auto max-w-2xl p-4">
-            <TaskContainer tasks={tasks} />
-        </div>
+  return (
+    <div className="mx-auto w-120 p-4 flex flex-col justify-between items-center">
+        <h1>TaskUp - Suas Atividades em Dia</h1>
+        <TaskContainer tasks={tasks} />
+    </div>
   );
 }
