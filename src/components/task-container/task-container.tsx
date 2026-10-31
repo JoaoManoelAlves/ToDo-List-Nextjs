@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { TaskInputForm, type EditableTask } from "@/components/task-input/task-input-form";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export function TaskContainer({ tasks }: { tasks: EditableTask[] }) {
   const [editingTask, setEditingTask] = useState<EditableTask | null>(null);
@@ -43,6 +44,7 @@ export function TaskContainer({ tasks }: { tasks: EditableTask[] }) {
               >
                 Alterar
               </Button>
+              <Checkbox/>
             </li>
           ))}
         </ul>
