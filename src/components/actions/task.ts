@@ -66,15 +66,39 @@ export async function updateTask(
       };
     }
 
-    // userId no where impede editar tarefas de outro usuário
+    // userId impede editar tarefas de outro usuário
+    // completed: false impede editar tarefas já concluídas
     const result = await prisma.task.updateMany({
-      where: { id, userId: user.id },
+      where: { id, userId: user.id, completed: false },
       data: {
         title: validateTask.data.title,
-        // undefined é ignorado pelo Prisma no update, então usamos null
-        // para permitir apagar a descrição
         description: validateTask.data.description ?? null,
       },
+    });
+
+    if (result.count === 0) {
+      return { message: "Atividade não encontrada ou já concluída" };
+    }
+
+    revalidatePath("/tasklist");
+    return { success: true, message: "Atividade atualizada com sucesso" };
+  } catch (error) {
+    console.error("Erro ao atualizar task:", error);
+    return { message: "Não foi possível atualizar a tarefa." };
+  }
+}
+
+export async function setTaskCompleted(
+  id: string,
+  completed: boolean
+): Promise<{ message?: string }> {
+  try {
+    const user = await ensureUser();
+    if (!user) return { message: "Deve estar logado" };
+
+    const result = await prisma.task.updateMany({
+      where: { id, userId: user.id },
+      data: { completed },
     });
 
     if (result.count === 0) {
@@ -82,9 +106,9 @@ export async function updateTask(
     }
 
     revalidatePath("/tasklist");
-    return { success: true, message: "Atividade atualizada com sucesso" };
+    return {};
   } catch (error) {
-    console.error("Erro ao atualizar task:", error);
+    console.error("Erro ao concluir task:", error);
     return { message: "Não foi possível atualizar a tarefa." };
   }
 }

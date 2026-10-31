@@ -244,7 +244,7 @@ export type TaskCreateInput = {
   id?: string
   title: string
   description?: string | null
-  completed: boolean
+  completed?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTasksInput
 }
@@ -253,7 +253,7 @@ export type TaskUncheckedCreateInput = {
   id?: string
   title: string
   description?: string | null
-  completed: boolean
+  completed?: boolean
   createdAt?: Date | string
   userId: string
 }
@@ -280,7 +280,7 @@ export type TaskCreateManyInput = {
   id?: string
   title: string
   description?: string | null
-  completed: boolean
+  completed?: boolean
   createdAt?: Date | string
   userId: string
 }
@@ -393,7 +393,7 @@ export type TaskCreateWithoutUserInput = {
   id?: string
   title: string
   description?: string | null
-  completed: boolean
+  completed?: boolean
   createdAt?: Date | string
 }
 
@@ -401,7 +401,7 @@ export type TaskUncheckedCreateWithoutUserInput = {
   id?: string
   title: string
   description?: string | null
-  completed: boolean
+  completed?: boolean
   createdAt?: Date | string
 }
 
@@ -447,7 +447,7 @@ export type TaskCreateManyUserInput = {
   id?: string
   title: string
   description?: string | null
-  completed: boolean
+  completed?: boolean
   createdAt?: Date | string
 }
 
