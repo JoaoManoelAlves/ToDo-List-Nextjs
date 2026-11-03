@@ -3,7 +3,7 @@
 import { useCallback, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { setTaskCompleted } from "@/components/actions/task";
+import { deleteTask, setTaskCompleted } from "@/components/actions/task";
 import { TaskInputForm, type EditableTask } from "@/components/task-input/task-input-form";
 
 export function TaskContainer({ tasks }: { tasks: EditableTask[] }) {
@@ -18,6 +18,16 @@ export function TaskContainer({ tasks }: { tasks: EditableTask[] }) {
 
     startTransition(async () => {
       await setTaskCompleted(task.id, !task.completed);
+    });
+  }
+
+  function handleDelete(task: EditableTask) {
+    if (!window.confirm(`Excluir a atividade "${task.title}"?`)) return;
+
+    if (editingTask?.id === task.id) setEditingTask(null);
+
+    startTransition(async () => {
+      await deleteTask(task.id);
     });
   }
 
@@ -65,8 +75,16 @@ export function TaskContainer({ tasks }: { tasks: EditableTask[] }) {
 
               <div className="flex shrink-0 items-center gap-3">
                 <Button
-                  variant="outline"
-                  size="sm"
+                  variant={"destructive"}
+                  size={"sm"}
+                  onClick={() => handleDelete(task)}
+                  disabled={task.completed || isPending}
+                >
+                  Excluir
+                </Button>
+                <Button
+                  variant={"outline"}
+                  size={"sm"}
                   onClick={() => setEditingTask(task)}
                   disabled={task.completed || isPending}
                 >

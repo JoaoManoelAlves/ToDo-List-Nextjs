@@ -19,10 +19,7 @@ function readTaskForm(formData: FormData) {
   };
 }
 
-export async function createTask(
-  _prevState: TaskFormState,
-  formData: FormData
-): Promise<TaskFormState> {
+export async function createTask(_prevState: TaskFormState,formData: FormData): Promise<TaskFormState> {
   try {
     const user = await ensureUser();
     if (!user) return { message: "Deve estar logado" };
@@ -48,10 +45,7 @@ export async function createTask(
   }
 }
 
-export async function updateTask(
-  _prevState: TaskFormState,
-  formData: FormData
-): Promise<TaskFormState> {
+export async function updateTask(_prevState: TaskFormState, formData: FormData): Promise<TaskFormState> {
   try {
     const user = await ensureUser();
     if (!user) return { message: "Deve estar logado" };
@@ -88,10 +82,7 @@ export async function updateTask(
   }
 }
 
-export async function setTaskCompleted(
-  id: string,
-  completed: boolean
-): Promise<{ message?: string }> {
+export async function setTaskCompleted(id: string, completed: boolean): Promise<{ message?: string }> {
   try {
     const user = await ensureUser();
     if (!user) return { message: "Deve estar logado" };
@@ -108,7 +99,28 @@ export async function setTaskCompleted(
     revalidatePath("/tasklist");
     return {};
   } catch (error) {
-    console.error("Erro ao concluir task:", error);
+	  console.error("Erro ao concluir task:", error);
     return { message: "Não foi possível atualizar a tarefa." };
+  }
+}
+
+export async function deleteTask(id: string): Promise<{ message?: string }> {
+  try {
+    const user = await ensureUser();
+    if (!user) return { message: "Deve estar logado" };
+
+    const result = await prisma.task.deleteMany({
+      where: { id, userId: user.id },
+    });
+
+    if (result.count === 0) {
+      return { message: "Atividade não encontrada" };
+    }
+
+    revalidatePath("/tasklist");
+    return {};
+  } catch (error) {
+    console.error("Erro ao excluir task:", error);
+    return { message: "Não foi possível excluir a tarefa." };
   }
 }
