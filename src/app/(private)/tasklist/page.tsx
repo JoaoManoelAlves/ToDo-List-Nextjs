@@ -14,9 +14,19 @@ export default async function TaskListPage() {
     : [];
 
   return (
-    <div className="mx-auto w-120 p-4 flex flex-col justify-between items-center">
-        <h1>TaskUp - Suas Atividades em Dia</h1>
-        <TaskContainer tasks={tasks} />
-    </div>
+    <main className="min-h-screen bg-white px-4 py-10">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
+        <header className="space-y-2 text-center">
+          <h1 className="text-4xl font-bold tracking-tight">TaskUp</h1>
+          <p className="text-lg text-muted-foreground">
+            Suas atividades em dia
+          </p>
+        </header>
+
+        <section className="rounded-xl border-[3px] border-solid border-black p-6">
+          <TaskContainer tasks={tasks} />
+        </section>
+      </div>
+    </main>
   );
 }
